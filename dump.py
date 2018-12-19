@@ -1,10 +1,34 @@
 import wx
-from pymongo import MongoClient
 import os
+import socket
 
-MONGODB_HOST = os.environ.get('MONGODB_HOST', 'localhost')
-client = MongoClient(MONGODB_HOST, 27017)
-db = client.paymentregister
+from pymongo import MongoClient  
+try: 
+    conn = MongoClient() 
+    print("Connected successfully!!!") 
+except:   
+    print("Could not connect to MongoDB") 
+
+# database
+db = conn.paymentregister
+
+# create and switch to collect query
+collection = db.paymentdata
+
+Output = "Output"
+
+RegisterQuery = { 
+        "PaymentName":Output, 
+           } 
+
+# Insert the query
+querydata = collection.insert_one(RegisterQuery)
+
+# Print the query
+
+cursor = collection.find() 
+for record in cursor: 
+    print(record) 
 
 class Frame(wx.Frame):
     def __init__(self, parent):
@@ -22,7 +46,7 @@ class Frame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnExit, id = 3003) 
         
         self.panel = wx.Panel(self)     
-        self.quote = wx.StaticText(self.panel, label="Output:")
+        self.quote = wx.StaticText(self.panel, label="Output")
         self.result = wx.StaticText(self.panel, label="")
         self.result.SetForegroundColour(wx.RED)
         self.button = wx.Button(self.panel, label="Save")
@@ -67,7 +91,7 @@ class Frame(wx.Frame):
       win.Show(True) 
 
 if __name__ == '__main__':
-    
+
     app = wx.App(False)
     frame = Frame(None)
     frame.Show()
