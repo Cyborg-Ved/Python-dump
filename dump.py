@@ -1,4 +1,11 @@
 import wx
+from pymongo import MongoClient
+import os
+
+MONGODB_HOST = os.environ.get('MONGODB_HOST', 'localhost')
+client = MongoClient(MONGODB_HOST, 27017)
+db = client.paymentregister
+
 class Frame(wx.Frame):
     def __init__(self, parent):
         wx.Frame.__init__(self, parent,-1, "Payment Register", size = (600,400))
@@ -15,11 +22,11 @@ class Frame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnExit, id = 3003) 
         
         self.panel = wx.Panel(self)     
-        self.quote = wx.StaticText(self.panel, label="Your quote:")
+        self.quote = wx.StaticText(self.panel, label="Output:")
         self.result = wx.StaticText(self.panel, label="")
         self.result.SetForegroundColour(wx.RED)
         self.button = wx.Button(self.panel, label="Save")
-        self.lblname = wx.StaticText(self.panel, label="Your name:")
+        self.lblname = wx.StaticText(self.panel, label="Gateway Name:")
         self.editname = wx.TextCtrl(self.panel, size=(140, -1))
 
         # Set sizer for the frame, so we can change frame size to match widgets
@@ -59,7 +66,9 @@ class Frame(wx.Frame):
       win = wx.MDIChildFrame(self, -2, "Child Window")
       win.Show(True) 
 
-app = wx.App(False)
-frame = Frame(None)
-frame.Show()
-app.MainLoop()
+if __name__ == '__main__':
+    
+    app = wx.App(False)
+    frame = Frame(None)
+    frame.Show()
+    app.MainLoop()
