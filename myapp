@@ -66,7 +66,7 @@ class Frame(wx.Frame):
       self.Close(True)  
 		
     def OnNewWindow(self,parent, evt): 
-        win = wx.Frame.__init__(self,parent, -1, "Register")
+        win = wx.Frame(self,parent, -1, "Register")
         self.panel = wx.Panel(self)     
         self.quote = wx.StaticText(self.panel, label="QUERY")
         self.result = wx.StaticText(self.panel, label="")
